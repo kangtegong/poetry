@@ -38,9 +38,6 @@ license = ""
 [tool.poetry.dev-dependencies]
 """
 
-BUILD_SYSTEM_MIN_VERSION = "0.12"
-BUILD_SYSTEM_MAX_VERSION = None
-
 
 class Layout(object):
     def __init__(
@@ -105,12 +102,8 @@ class Layout(object):
 
         # Add build system
         build_system = table()
-        build_system_version = ">=" + BUILD_SYSTEM_MIN_VERSION
-        if BUILD_SYSTEM_MAX_VERSION is not None:
-            build_system_version += ",<" + BUILD_SYSTEM_MAX_VERSION
-
-        build_system.add("requires", ["poetry" + build_system_version])
-        build_system.add("build-backend", "poetry.masonry.api")
+        build_system.add("requires", ["poetry-core"])
+        build_system.add("build-backend", "poetry_core.masonry.api")
 
         content.add("build-system", build_system)
 

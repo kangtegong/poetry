@@ -52,9 +52,9 @@ class SelfUpdateCommand(Command):
         return self.home / "lib-backup"
 
     def handle(self):
+        from poetry_core.semver import Version
         from poetry.__version__ import __version__
         from poetry.repositories.pypi_repository import PyPiRepository
-        from poetry.semver import Version
         from poetry.utils._compat import Path
 
         current = Path(__file__)

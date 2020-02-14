@@ -684,7 +684,7 @@ python-versions = "*"
 version = "1.3.4"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Core utilities for Python packages"
 name = "packaging"
 optional = false
@@ -773,6 +773,33 @@ version = ">=0.12"
 
 [package.extras]
 dev = ["pre-commit", "tox"]
+
+[[package]]
+category = "main"
+description = "Core utilities for Poetry"
+name = "poetry-core"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "1.0.0a1"
+
+[package.dependencies]
+jsonschema = ">=3.2.0,<4.0.0"
+packaging = ">=20.1,<21.0"
+pkginfo = ">=1.5.0,<2.0.0"
+pyparsing = ">=2.4.6,<3.0.0"
+tomlkit = ">=0.5.8,<0.6.0"
+
+[package.dependencies.glob2]
+python = ">=2.7,<2.8 || >=3.4,<3.5"
+version = ">=0.6,<0.7"
+
+[package.dependencies.pathlib2]
+python = ">=2.7,<2.8 || >=3.4,<3.5"
+version = ">=2.3,<3.0"
+
+[package.dependencies.typing]
+python = ">=2.7,<2.8 || >=3.4,<3.5"
+version = ">=3.6,<4.0"
 
 [[package]]
 category = "dev"
@@ -1107,7 +1134,7 @@ requests = ">=2.0.1,<3.0.0"
 [[package]]
 category = "main"
 description = "scandir, a better directory iterator and faster os.walk()"
-marker = "python_version >= \"2.7\" and python_version < \"2.8\" or python_version >= \"3.4\" and python_version < \"3.5\""
+marker = "python_version >= \"2.7\" and python_version < \"2.8\" or python_version >= \"3.4\" and python_version < \"3.5\" or python_version < \"3.5\""
 name = "scandir"
 optional = false
 python-versions = "*"
@@ -1342,7 +1369,6 @@ version = "0.5.1"
 [[package]]
 category = "main"
 description = "Backport of pathlib-compatible object wrapper for zip files"
-marker = "python_version >= \"3.5\" and python_version < \"3.8\" or python_version < \"3.8\""
 name = "zipp"
 optional = false
 python-versions = ">=2.7"
@@ -1358,7 +1384,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pathlib2", "unittest2", "jaraco.itertools"]
 
 [metadata]
-content-hash = "e0b632d8363fdf9f70d93901ff537714611bfc31705a897f6d2fb3bc010bca0a"
+content-hash = "d30a42a6b16b3f88c59192248eaf1f0b1f68fcf1a2fe4ff0d2ca18810b17bd78"
 python-versions = "~2.7 || ^3.4"
 
 [metadata.files]
@@ -1748,6 +1774,10 @@ pkginfo = [
 pluggy = [
     {file = "pluggy-0.13.1-py2.py3-none-any.whl", hash = "sha256:966c145cd83c96502c3c3868f50408687b38434af77734af1e9ca461a4081d2d"},
     {file = "pluggy-0.13.1.tar.gz", hash = "sha256:15b2acde666561e1298d71b523007ed7364de07029219b604cf808bfa1c765b0"},
+]
+poetry-core = [
+    {file = "poetry-core-1.0.0a1.tar.gz", hash = "sha256:8baeb2d9980091bf8e4375c0f6a87e19a8d56083bdfb5a3875a7bd57befc257e"},
+    {file = "poetry_core-1.0.0a1-py2.py3-none-any.whl", hash = "sha256:ed6c10cd45b91281e535f6ae5d223d9347278ef847805307615b32269693eb73"},
 ]
 pre-commit = [
     {file = "pre_commit-1.18.3-py2.py3-none-any.whl", hash = "sha256:fa78ff96e8e9ac94c748388597693f18b041a181c94a4f039ad20f45287ba44a"},
