@@ -333,7 +333,9 @@ class Package(object):
                         develop=constraint.get("develop", True),
                     )
             elif "url" in constraint:
-                dependency = URLDependency(name, constraint["url"], category=category)
+                dependency = URLDependency(
+                    name, constraint["url"], category=category, optional=optional
+                )
             else:
                 version = constraint["version"]
 
@@ -407,6 +409,7 @@ class Package(object):
 
     def clone(self):  # type: () -> Package
         clone = self.__class__(self.pretty_name, self.version)
+        clone.description = self.description
         clone.category = self.category
         clone.optional = self.optional
         clone.python_versions = self.python_versions

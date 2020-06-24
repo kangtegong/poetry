@@ -1,7 +1,6 @@
 import os
 import tempfile
 
-from io import open
 from subprocess import CalledProcessError
 
 from clikit.api.io import IO
@@ -105,12 +104,6 @@ class PipInstaller(BaseInstaller):
         self.install(target, update=True)
 
     def remove(self, package):
-        # If we have a VCS package, remove its source directory
-        if package.source_type == "git":
-            src_dir = self._env.path / "src" / package.name
-            if src_dir.exists():
-                safe_rmtree(str(src_dir))
-
         try:
             self.run("uninstall", package.name, "-y")
         except CalledProcessError as e:
@@ -118,6 +111,17 @@ class PipInstaller(BaseInstaller):
                 return
 
             raise
+
+        # This is a workaround for https://github.com/pypa/pip/issues/4176
+        nspkg_pth_file = self._env.site_packages / "{}-nspkg.pth".format(package.name)
+        if nspkg_pth_file.exists():
+            nspkg_pth_file.unlink()
+
+        # If we have a VCS package, remove its source directory
+        if package.source_type == "git":
+            src_dir = self._env.path / "src" / package.name
+            if src_dir.exists():
+                safe_rmtree(str(src_dir))
 
     def run(self, *args, **kwargs):  # type: (...) -> str
         return self._env.run_pip(*args, **kwargs)
@@ -176,10 +180,7 @@ class PipInstaller(BaseInstaller):
         return name
 
     def install_directory(self, package):
-        from poetry.masonry.builder import SdistBuilder
         from poetry.factory import Factory
-        from poetry.utils._compat import decode
-        from poetry.utils.env import NullEnv
         from poetry.utils.toml_file import TomlFile
 
         if package.root_dir:
@@ -205,17 +206,20 @@ class PipInstaller(BaseInstaller):
 
         setup = os.path.join(req, "setup.py")
         has_setup = os.path.exists(setup)
-        if not has_setup and has_poetry and (package.develop or not has_build_system):
+        if has_poetry and (package.develop or not has_build_system):
             # We actually need to rely on creating a temporary setup.py
             # file since pip, as of this comment, does not support
             # build-system for editable packages
             # We also need it for non-PEP-517 packages
-            builder = SdistBuilder(
-                Factory().create_poetry(pyproject.parent), NullEnv(), NullIO()
+            from poetry.masonry.builders.editable import EditableBuilder
+
+            builder = EditableBuilder(
+                Factory().create_poetry(pyproject.parent), self._env, NullIO()
             )
 
-            with open(setup, "w", encoding="utf-8") as f:
-                f.write(decode(builder.build_setup()))
+            builder.build()
+
+            return
 
         if package.develop:
             args.append("-e")
